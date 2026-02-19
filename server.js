@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,17 +11,22 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
+// Serve static files (like index.html, app.js, CSS)
+app.use(express.static(__dirname));
+
+// ========== MONGODB CONNECTION ==========
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/order-glam-db';
 
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch(err => {
+    console.error('MongoDB connection error:', err);
+});
 
-// Schemas
+// ========== SCHEMAS ==========
 const userSchema = new mongoose.Schema({
     userId: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -53,11 +59,16 @@ const announcementSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now }
 });
 
-// Models
+// ========== MODELS ==========
 const User = mongoose.model('User', userSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Note = mongoose.model('Note', noteSchema);
 const Announcement = mongoose.model('Announcement', announcementSchema);
+
+// ========== ROOT ROUTE ==========
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // ========== AUTH ROUTES ==========
 
@@ -65,16 +76,11 @@ const Announcement = mongoose.model('Announcement', announcementSchema);
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { userId, password } = req.body;
-
         const user = await User.findOne({ userId });
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
+        if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
+        if (!isValid) return res.status(401).json({ error: 'Invalid credentials' });
 
         res.json({ userId: user.userId, isMember: user.isMember });
     } catch (error) {
@@ -95,15 +101,17 @@ app.post('/api/auth/signup', async (req, res) => {
         }
 
         const existingUser = await User.findOne({ userId });
-        if (existingUser) {
-            return res.status(409).json({ error: 'User ID already exists' });
-        }
+        if (existingUser) return res.status(409).json({ error: 'User ID already exists' });
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new User({ userId, password: hashedPassword, isMember });
-        await newUser.save();
+        const newUser = new User({
+            userId,
+            password: hashedPassword,
+            isMember
+        });
 
+        await newUser.save();
         res.json({ userId: newUser.userId, isMember: newUser.isMember });
     } catch (error) {
         console.error('Signup error:', error);
@@ -136,9 +144,7 @@ app.post('/api/notes/:userId', async (req, res) => {
         const { notes } = req.body;
 
         let note = await Note.findOne({ userId });
-        if (!note) {
-            note = new Note({ userId });
-        }
+        if (!note) note = new Note({ userId });
 
         note.content = notes;
         note.updatedAt = new Date();
@@ -170,6 +176,7 @@ app.post('/api/orders', async (req, res) => {
         const orderData = req.body;
         const newOrder = new Order(orderData);
         await newOrder.save();
+
         res.json(newOrder);
     } catch (error) {
         console.error('Create order error:', error);
@@ -184,9 +191,7 @@ app.patch('/api/orders/:orderId', async (req, res) => {
         const { status } = req.body;
 
         const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
-        if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
+        if (!order) return res.status(404).json({ error: 'Order not found' });
 
         res.json(order);
     } catch (error) {
