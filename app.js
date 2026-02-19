@@ -1,72 +1,88 @@
-// SIGN-UP FUNCTIONALITY
-document.getElementById('signupBtn').addEventListener('click', async () => {
-    const userId = document.getElementById('userId').value;
-    const password = document.getElementById('password').value;
-    const isMember = document.getElementById('isMember').checked;
-    const signupMessage = document.getElementById('signupMessage');
+// Pages
+const loginPage = document.getElementById('login-page');
+const mainPage = document.getElementById('main-page');
 
-    try {
-        const response = await fetch('/api/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, password, isMember })
-        });
+// Buttons
+const signupBtn = document.getElementById('signupBtn');
+const loginBtn = document.getElementById('loginBtn');
+const doneBtn = document.getElementById('doneBtn');
 
-        const data = await response.json();
+// Inputs
+const userIdInput = document.getElementById('userId');
+const passwordInput = document.getElementById('password');
+const memberCheckbox = document.getElementById('memberCheckbox');
 
-        if (response.ok) {
-            signupMessage.style.color = 'green';
-            signupMessage.textContent = `Sign-up successful! Welcome ${data.userId}`;
-        } else {
-            signupMessage.style.color = 'red';
-            signupMessage.textContent = data.error || 'Error signing up';
-        }
-    } catch (error) {
-        signupMessage.style.color = 'red';
-        signupMessage.textContent = 'Server error';
-        console.error(error);
-    }
+// Containers
+const itemsContainer = document.getElementById('items-container');
+const servicesContainer = document.getElementById('services-container');
+const selectedList = document.getElementById('selectedList');
+
+// Selected items/services
+let selected = [];
+
+// Toggle selection
+function toggleSelection(element) {
+  const name = element.dataset.name;
+  if (selected.includes(name)) {
+    selected = selected.filter(i => i !== name);
+    element.style.backgroundColor = '';
+  } else {
+    selected.push(name);
+    element.style.backgroundColor = '#cce5ff';
+  }
+  renderSelected();
+}
+
+// Render selected list
+function renderSelected() {
+  selectedList.innerHTML = '';
+  selected.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    selectedList.appendChild(li);
+  });
+}
+
+// Event listeners for items
+document.querySelectorAll('.item').forEach(el => {
+  el.addEventListener('click', () => toggleSelection(el));
 });
 
-// PLACE ORDER FUNCTIONALITY
-document.getElementById('placeOrderBtn').addEventListener('click', async () => {
-    const items = Array.from(document.getElementById('itemsSelect').selectedOptions).map(opt => opt.value);
-    const services = Array.from(document.getElementById('servicesSelect').selectedOptions).map(opt => opt.value);
-    const userId = document.getElementById('userId').value; // assuming signed in
-    const orderMessage = document.getElementById('orderMessage');
+// Event listeners for services
+document.querySelectorAll('.service').forEach(el => {
+  el.addEventListener('click', () => toggleSelection(el));
+});
 
-    if (!userId) {
-        orderMessage.style.color = 'red';
-        orderMessage.textContent = 'Please sign up or login first.';
-        return;
-    }
+// Done button
+doneBtn.addEventListener('click', () => {
+  if (selected.length === 0) {
+    alert('Please select at least one item or service.');
+    return;
+  }
+  alert('Selection complete!');
+  // Clear selections after done
+  selected = [];
+  document.querySelectorAll('.item, .service').forEach(el => el.style.backgroundColor = '');
+  renderSelected();
+});
 
-    try {
-        const response = await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                type: 'order',
-                name: userId,
-                dateTime: new Date(),
-                items,
-                services,
-                userId
-            })
-        });
+// Signup / Login simulation
+signupBtn.addEventListener('click', () => {
+  if (userIdInput.value && passwordInput.value) {
+    alert(`Signed up as ${userIdInput.value} ${memberCheckbox.checked ? '(Member)' : ''}`);
+    loginPage.style.display = 'none';
+    mainPage.style.display = 'block';
+  } else {
+    alert('Please enter Access ID and Password.');
+  }
+});
 
-        const data = await response.json();
-
-        if (response.ok) {
-            orderMessage.style.color = 'green';
-            orderMessage.textContent = 'Order placed successfully!';
-        } else {
-            orderMessage.style.color = 'red';
-            orderMessage.textContent = data.error || 'Error placing order';
-        }
-    } catch (error) {
-        orderMessage.style.color = 'red';
-        orderMessage.textContent = 'Server error';
-        console.error(error);
-    }
+loginBtn.addEventListener('click', () => {
+  if (userIdInput.value && passwordInput.value) {
+    alert(`Logged in as ${userIdInput.value} ${memberCheckbox.checked ? '(Member)' : ''}`);
+    loginPage.style.display = 'none';
+    mainPage.style.display = 'block';
+  } else {
+    alert('Please enter Access ID and Password.');
+  }
 });

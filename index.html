@@ -1,93 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Order Glam App</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 350px;
-        }
-        h1 {
-            text-align: center;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        button {
-            background-color: black;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #333;
-        }
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .checkbox-container input {
-            width: auto;
-            margin-right: 10px;
-        }
-        .message {
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glam App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="container">
-    <h1>Sign Up</h1>
-    <div class="message" id="signupMessage"></div>
-    <input type="text" id="userId" placeholder="User ID">
-    <input type="password" id="password" placeholder="Password">
-    <div class="checkbox-container">
-        <input type="checkbox" id="isMember">
-        <label for="isMember">Become a Member</label>
-    </div>
+  <!-- Sign Up / Login -->
+  <div id="login-page">
+    <h2>Sign In / Sign Up</h2>
+    <input type="text" id="userId" placeholder="Enter Access ID">
+    <input type="password" id="password" placeholder="Enter Password">
+    <label>
+      <input type="checkbox" id="memberCheckbox">
+      Become a Member
+    </label>
     <button id="signupBtn">Sign Up</button>
+    <button id="loginBtn">Login</button>
+  </div>
 
-    <h1>Choose Items & Services</h1>
-    <select id="itemsSelect" multiple>
-        <option value="Hair">Hair</option>
-        <option value="Nails">Nails</option>
-        <option value="Waxing">Waxing</option>
-    </select>
-    <select id="servicesSelect" multiple>
-        <option value="Lip Filler">Lip Filler</option>
-        <option value="Body Tanning">Body Tanning</option>
-        <option value="Face Treatments">Face Treatments</option>
-        <option value="UV Treatment">UV Treatment</option>
-    </select>
-    <button id="placeOrderBtn">Place Order</button>
-    <div class="message" id="orderMessage"></div>
-</div>
+  <!-- Main Page -->
+  <div id="main-page" style="display:none;">
+    <h2>Choose Items / Services</h2>
+    <div id="items-container">
+      <h3>Items</h3>
+      <div class="item" data-name="Haircut">Haircut</div>
+      <div class="item" data-name="Manicure">Manicure</div>
+      <div class="item" data-name="Waxing">Waxing</div>
+    </div>
+    <div id="services-container">
+      <h3>Services</h3>
+      <div class="service" data-name="Face Treatment">Face Treatment</div>
+      <div class="service" data-name="Body Tanning">Body Tanning</div>
+      <div class="service" data-name="Lip Filler">Lip Filler</div>
+    </div>
+    <button id="doneBtn">Done</button>
 
-<script src="app.js"></script>
+    <h3>Selected:</h3>
+    <ul id="selectedList"></ul>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
