@@ -2,609 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order & Glam Management</title>
+    <title>Order Glam App</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: white;
-            color: black;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .screen {
-            display: none;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        h1, h2 {
-            color: #007BFF;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .welcome-text {
-            color: #007BFF;
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .username-display {
-            color: #007BFF;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="datetime-local"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #007BFF;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-        }
-
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #0056b3;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background: #0056b3;
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #007BFF;
-            border: 2px solid #007BFF;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f8ff;
-        }
-
-        .btn-accept {
-            background: #28a745;
-            width: 48%;
-            float: right;
-        }
-
-        .btn-decline {
-            background: #dc3545;
-            width: 48%;
-            float: left;
-        }
-
-        .link-text {
-            text-align: center;
-            margin-top: 15px;
-            color: #666;
-        }
-
-        .link-text a {
-            color: #007BFF;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .link-text a:hover {
-            text-decoration: underline;
-        }
-
-        .error-text {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .notes-section {
-            margin-top: 30px;
-        }
-
-        .notes-label {
-            background: #007BFF;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .notes-textarea {
-            width: 100%;
-            min-height: 300px;
-            padding: 16px;
-            border: 2px solid #007BFF;
-            border-radius: 8px;
-            background: repeating-linear-gradient(
-                white,
-                white 30px,
-                #e0e0e0 30px,
-                #e0e0e0 31px
-            );
-            line-height: 30px;
-            font-size: 16px;
-            resize: vertical;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top: 1px solid #ddd;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f7;
             display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .nav-item {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            cursor: pointer;
-            position: relative;
-            font-size: 12px;
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #007BFF;
-        }
-
-        .nav-item.active {
-            color: #007BFF;
-        }
-
-        .main-content {
-            padding-bottom: 80px;
-        }
-
-        .items-list {
-            max-height: 300px;
-            overflow-y: auto;
-            border: 2px solid #007BFF;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .item-checkbox {
-            display: block;
-            margin: 8px 0;
-        }
-
-        .item-checkbox input {
-            margin-right: 8px;
-        }
-
-        .order-card, .announcement-card {
-            background: white;
-            border: 2px solid #007BFF;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .order-card h3 {
-            color: #007BFF;
-            margin-bottom: 10px;
-        }
-
-        .order-detail {
-            margin: 6px 0;
-            font-size: 14px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-
-        .status-pending {
-            background: #ffc107;
-            color: black;
-        }
-
-        .status-accepted {
-            background: #28a745;
-            color: white;
-        }
-
-        .status-declined {
-            background: #dc3545;
-            color: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            margin: 0;
         }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            width: 100%;
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 350px;
         }
-
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .loading {
+        h1 {
             text-align: center;
-            padding: 20px;
-            color: #666;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background-color: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox-container input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .message {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div id="loginScreen" class="screen active">
-        <div class="container">
-            <h1>Log In</h1>
-            <div class="input-group">
-                <label>User ID</label>
-                <input type="text" id="loginUserId" placeholder="Enter User ID">
-                <div class="error-text" id="loginUserIdError"></div>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter Password">
-            </div>
-            <button class="btn" onclick="handleLogin()">Log In</button>
-            <div class="link-text">
-                Don't have an account? <a onclick="showScreen('signupScreen')">Sign up</a>
-            </div>
-        </div>
+<div class="container">
+    <h1>Sign Up</h1>
+    <div class="message" id="signupMessage"></div>
+    <input type="text" id="userId" placeholder="User ID">
+    <input type="password" id="password" placeholder="Password">
+    <div class="checkbox-container">
+        <input type="checkbox" id="isMember">
+        <label for="isMember">Become a Member</label>
     </div>
+    <button id="signupBtn">Sign Up</button>
 
-    <!-- Sign Up Screen -->
-    <div id="signupScreen" class="screen">
-        <div class="container">
-            <h1>Please create User ID and Password</h1>
-            <div class="input-group">
-                <label>User ID</label>
-                <input type="text" id="signupUserId" placeholder="Enter User ID">
-                <div class="error-text" id="signupUserIdError"></div>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="signupPassword" placeholder="Enter Password">
-            </div>
-            <button class="btn" onclick="handleSignup()">Sign Up</button>
-            <div class="link-text">
-                Already have an account? <a onclick="showScreen('loginScreen')">Log in</a>
-            </div>
-            <div class="link-text" style="margin-top: 30px;">
-                <a onclick="showMemberCodePrompt()">Become a Member</a>
-            </div>
-        </div>
-    </div>
+    <h1>Choose Items & Services</h1>
+    <select id="itemsSelect" multiple>
+        <option value="Hair">Hair</option>
+        <option value="Nails">Nails</option>
+        <option value="Waxing">Waxing</option>
+    </select>
+    <select id="servicesSelect" multiple>
+        <option value="Lip Filler">Lip Filler</option>
+        <option value="Body Tanning">Body Tanning</option>
+        <option value="Face Treatments">Face Treatments</option>
+        <option value="UV Treatment">UV Treatment</option>
+    </select>
+    <button id="placeOrderBtn">Place Order</button>
+    <div class="message" id="orderMessage"></div>
+</div>
 
-    <!-- Member Sign Up Screen -->
-    <div id="memberSignupScreen" class="screen">
-        <div class="container">
-            <h1>Member Sign Up</h1>
-            <div class="input-group">
-                <label>User ID</label>
-                <input type="text" id="memberSignupUserId" placeholder="Enter User ID">
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="memberSignupPassword" placeholder="Enter Password">
-            </div>
-            <button class="btn" onclick="handleMemberSignup()">Sign Up as Member</button>
-            <div class="link-text">
-                <a onclick="showScreen('loginScreen')">Back to Login</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Home Screen -->
-    <div id="homeScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <div class="welcome-text">Welcome</div>
-                <div class="username-display" id="homeUsername"></div>
-
-                <div class="notes-section" id="notesSection">
-                    <div class="notes-label">Notes</div>
-                    <textarea class="notes-textarea" id="notesTextarea" placeholder="Type your notes here..."></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- Orders Page -->
-    <div id="ordersScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <h2>Welcome to Orders Page</h2>
-                <form id="ordersForm">
-                    <div class="input-group">
-                        <label>Name</label>
-                        <input type="text" id="orderName" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Order Time & Date</label>
-                        <input type="datetime-local" id="orderDateTime" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Pick Up / Delivery</label>
-                        <select id="orderType" required>
-                            <option value="">Select...</option>
-                            <option value="Pick Up">Pick Up</option>
-                            <option value="Delivery">Delivery</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="showItemsModal()">Choose Items</button>
-                    <div id="selectedItemsDisplay" style="margin-top: 10px; font-size: 14px;"></div>
-                    <button type="submit" class="btn">Submit Order</button>
-                </form>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item active" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- Glam Page -->
-    <div id="glamScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <h2>Welcome to Glam Page</h2>
-                <form id="glamForm">
-                    <div class="input-group">
-                        <label>Name</label>
-                        <input type="text" id="glamName" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Date & Time</label>
-                        <input type="datetime-local" id="glamDateTime" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Appointment Type</label>
-                        <select id="glamAppointmentType" required>
-                            <option value="">Select...</option>
-                            <option value="Appointment">Appointment</option>
-                            <option value="Home Appointment">Home Appointment</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="showServicesModal()">Choose Services</button>
-                    <div id="selectedServicesDisplay" style="margin-top: 10px; font-size: 14px;"></div>
-                    <button type="submit" class="btn">Submit Appointment</button>
-                </form>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item active" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- See All Orders Page -->
-    <div id="allOrdersScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <h2>Welcome to See All Orders</h2>
-                <div id="allOrdersList"></div>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item active" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- Notifications Page -->
-    <div id="notificationsScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <h2>Notifications</h2>
-                <div id="notificationsList"></div>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item active" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- More Page -->
-    <div id="moreScreen" class="screen">
-        <div class="main-content">
-            <div class="container">
-                <h2>More</h2>
-                <button class="btn" onclick="showChangePasswordModal()">Change Password</button>
-                <button class="btn btn-secondary" onclick="showMemberCodePrompt()" id="becomeMemberBtn">Become a Member</button>
-                <button class="btn btn-secondary" onclick="showAnnouncementModal()" id="makeAnnouncementBtn" style="display: none;">Make Announcement</button>
-                <button class="btn" onclick="handleLogout()" style="background: #dc3545; margin-top: 30px;">Log Out</button>
-            </div>
-        </div>
-        <div class="bottom-nav">
-            <div class="nav-item" onclick="navigateTo('home')">🏠<br>Home</div>
-            <div class="nav-item" onclick="navigateTo('orders')">🧾<br>Orders</div>
-            <div class="nav-item" onclick="navigateTo('glam')">💄<br>Glam</div>
-            <div class="nav-item" onclick="navigateTo('allOrders')">📋<br>See All</div>
-            <div class="nav-item" onclick="navigateTo('notifications')">🔔<br>Alerts</div>
-            <div class="nav-item active" onclick="navigateTo('more')">⚙️<br>More</div>
-        </div>
-    </div>
-
-    <!-- Items Modal -->
-    <div id="itemsModal" class="modal">
-        <div class="modal-content">
-            <h2>Choose Items</h2>
-            <div class="items-list" id="itemsList"></div>
-            <button class="btn" onclick="closeItemsModal()">Done</button>
-        </div>
-    </div>
-
-    <!-- Services Modal -->
-    <div id="servicesModal" class="modal">
-        <div class="modal-content">
-            <h2>Choose Services</h2>
-            <div class="items-list" id="servicesList"></div>
-            <button class="btn" onclick="closeServicesModal()">Done</button>
-        </div>
-    </div>
-
-    <!-- Change Password Modal -->
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <h2>Change Password</h2>
-            <div class="input-group">
-                <label>Current Password</label>
-                <input type="password" id="currentPassword">
-            </div>
-            <div class="input-group">
-                <label>New Password</label>
-                <input type="password" id="newPassword">
-            </div>
-            <button class="btn" onclick="handleChangePassword()">Change Password</button>
-            <button class="btn btn-secondary" onclick="closeChangePasswordModal()">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Announcement Modal -->
-    <div id="announcementModal" class="modal">
-        <div class="modal-content">
-            <h2>Make Announcement</h2>
-            <div class="input-group">
-                <label>From</label>
-                <select id="announcementFrom">
-                    <option value="Owner">Owner</option>
-                    <option value="Member Team">Member Team</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Message</label>
-                <textarea id="announcementMessage" rows="5" style="border: 2px solid #007BFF; border-radius: 8px; padding: 12px;"></textarea>
-            </div>
-            <button class="btn" onclick="handleMakeAnnouncement()">Post Announcement</button>
-            <button class="btn btn-secondary" onclick="closeAnnouncementModal()">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="config.js"></script>
-    <script src="api.js"></script>
-    <script src="app.js"></script>
-
+<script src="app.js"></script>
 </body>
 </html>
