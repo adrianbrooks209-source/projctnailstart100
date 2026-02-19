@@ -7,9 +7,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Sign Up / Login -->
+  <!-- Login / Sign Up Page -->
   <div id="login-page">
-    <h2>Sign In / Sign Up</h2>
+    <img src="logo.png" alt="Clinic Logo" id="logo">
+    <h2>Sign in with Access ID</h2>
     <input type="text" id="userId" placeholder="Enter Access ID">
     <input type="password" id="password" placeholder="Enter Password">
     <label>
@@ -20,25 +21,24 @@
     <button id="loginBtn">Login</button>
   </div>
 
-  <!-- Main Page -->
-  <div id="main-page" style="display:none;">
-    <h2>Choose Items / Services</h2>
-    <div id="items-container">
-      <h3>Items</h3>
-      <div class="item" data-name="Haircut">Haircut</div>
-      <div class="item" data-name="Manicure">Manicure</div>
-      <div class="item" data-name="Waxing">Waxing</div>
-    </div>
-    <div id="services-container">
-      <h3>Services</h3>
-      <div class="service" data-name="Face Treatment">Face Treatment</div>
-      <div class="service" data-name="Body Tanning">Body Tanning</div>
-      <div class="service" data-name="Lip Filler">Lip Filler</div>
-    </div>
-    <button id="doneBtn">Done</button>
+  <!-- Items Page -->
+  <div id="items-page" style="display:none;">
+    <h2>Choose Items</h2>
+    <div class="item" data-name="Haircut">Haircut</div>
+    <div class="item" data-name="Manicure">Manicure</div>
+    <div class="item" data-name="Waxing">Waxing</div>
+    <button id="doneItemsBtn">Done</button>
+    <ul id="selectedItemsList"></ul>
+  </div>
 
-    <h3>Selected:</h3>
-    <ul id="selectedList"></ul>
+  <!-- Glam / Services Page -->
+  <div id="glam-page" style="display:none;">
+    <h2>Choose Services</h2>
+    <div class="service" data-name="Face Treatment">Face Treatment</div>
+    <div class="service" data-name="Body Tanning">Body Tanning</div>
+    <div class="service" data-name="Lip Filler">Lip Filler</div>
+    <button id="doneServicesBtn">Done</button>
+    <ul id="selectedServicesList"></ul>
   </div>
 
   <script src="app.js"></script>
